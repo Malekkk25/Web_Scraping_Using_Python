@@ -1,0 +1,88 @@
+{% load static %}
+{% load bootstrap4 %}   
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Smartphone</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css'  %}">
+    
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 class="text-center mt-4">Catalogues Smartphones</h1>
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-sm-4">
+                <form method="post" action="" class="border p-4">
+                    {% csrf_token %}
+                    <div class="form-group">
+                     <select name="nomSmart" class="form-control">
+                        <option value={{None}}>-- Choisir la marque --</option>
+                        {% for m in marque %}
+                        <option value="{{ m }}" {% if m == nomSmart %}selected{% endif %}>{{ m }}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                    <div class="form-group">
+                     <input type="number" name="prixMax" placeholder="Prix maximal" class="form-control" value="{{ prixMax }}">
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" value="Chercher" class="btn btn-primary">
+                        
+                    </div>
+                </form>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+         <div class="card-body">
+             <div class="table-responsive">
+                 <table class="table table-striped table-hover">
+                     <thead class="thead-dark">
+                         <tr>
+                             <th scope="col">Image</th>
+                             <th scope="col">Nom Produit</th>
+                             <th scope="col">Marque</th>
+                             <th scope="col" colspan="2">Prix sans remise</th>
+                             <th scope="col">Remise</th>
+                             <th scope="col">Prix en remise</th>
+                             <th scope="col">Lien détail</th>
+                         </tr>
+                         
+                     </thead>
+                     <tbody>
+                         {% for item in data %}
+                         <tr>
+                             <td><img src="{{ item.image }}" class="img-fluid" alt="Product Image"></td>
+                             <td>{{ item.nom }}</td>
+                             <td>{{ item.marque }}</td>
+                             <td colspan="2">{{ item.prix }}</td>
+                             <td>{{ item.pour }}</td>
+                             <td>{{ item.remise }}</td>
+                             <td><a href="{{ item.lien }}" class="btn btn-primary">Voir Détails</a></td>
+                         </tr>
+                         {% endfor %}
+                     </tbody>
+                 </table>
+             </div>
+             <br>
+             <div class="text-center">
+                 {% if ok == True %}
+                 {% for number in numbers %}
+                 <a href="?page={{ number.value }}" class="btn btn-primary">{{ number.value }}</a>
+                 {% endfor %}
+                 {% endif %}
+             </div>
+         </div>
+     </div>
+
+</body>
+
+</html>
